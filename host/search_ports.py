@@ -39,9 +39,9 @@ else:
 print ""
 print "Avaveble ports:"    
 print serial.tools.list_ports.main()
-print serial.tools.list_ports.comports()
-print "Linux COM Ports Active:"
-print serial.tools.list_ports_linux.comports()
+#print serial.tools.list_ports.comports()
+#print "Linux COM Ports Active:"
+#print serial.tools.list_ports_linux.comports()
 print ""
 
 if serial.tools.list_ports.comports() != []:
@@ -49,3 +49,14 @@ if serial.tools.list_ports.comports() != []:
     ports = list(serial.tools.list_ports.comports())
     for p in ports:
         print p
+        print p.manufacturer
+        #match usb with serial tool serial_number
+        print ""
+        print p.serial_number
+        print dev.serial_number
+        print ""
+        print p.usb_info()
+        print p.subsystem
+        print p.usb_description()
+        print p.vid
+        
