@@ -6,6 +6,16 @@ import serial.tools.list_ports
 #show device iformation
 dev = usb.core.find(idVendor=0x2341, idProduct=0x0043)
 if dev is None:
+    dev = usb.core.find(idVendor=0x1a86, idProduct=0x7523)
+if dev is None:
+    print "Failed to connect to any arduino"
+else:
+    #if dev.manufacturer
+    print dev.product
+    print hex(dev.__getattribute__('idProduct'))
+    print hex(dev.__getattribute__('idVendor'))
+
+if dev is None:
     #raise ValueError('Our device is not connected')
     print ""
     print "Target Device is not connected!"
