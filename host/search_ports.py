@@ -5,13 +5,29 @@ import serial.tools.list_ports
 
 #show device iformation
 dev = usb.core.find(idVendor=0x2341, idProduct=0x0043)
+wlan = usb.core.find(idVendor=0x7392, idProduct=0x7811)
+
+# If no wlan
+if wlan is None:
+    
+    print "No Wlan connected"
+
+else:
+    print "Wlan Connected"
+    print wlan.product
+    #print wlan.get_active_configuration()
+    print wlan.manufacturer
+
+# If arduino nano (Chinease)
 if dev is None:
     dev = usb.core.find(idVendor=0x1a86, idProduct=0x7523)
+
+# If no arduino at all
 if dev is None:
     print "Failed to connect to any arduino"
 else:
     #if dev.manufacturer
-    print dev.product
+    #print dev.product
     print hex(dev.__getattribute__('idProduct'))
     print hex(dev.__getattribute__('idVendor'))
 
@@ -33,6 +49,17 @@ if dev is None:
     
 else:
     print "Connected a device.."
+    print ""
+    print ""
+    print "Listing connected devices..."
+    print "*****************************************************************"
+    # get the full description of each connected device
+    devicees = usb.core.find(find_all=True)
+    for devs in devicees:
+        print "dev :::::::::::::::::::"
+        print devs._get_full_descriptor_str()
+    
+    
     print dev
     print "derp!"
     print usb.core.show_devices()

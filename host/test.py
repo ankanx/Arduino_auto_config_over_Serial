@@ -1,6 +1,6 @@
 import sys
 import serial
-import UsbSerial
+import lib.UsbSerial
 import time
 
 test = UsbSerial.USBclient()
