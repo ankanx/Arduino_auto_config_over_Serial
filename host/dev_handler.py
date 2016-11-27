@@ -40,15 +40,24 @@ class dev_handler(threading.Thread):
         mounted_Arduino_Uno = self.mounted_Arduino_Uno
         mounted_Arduino_Nano = self.mounted_Arduino_Nano
         mounted_Realtek_wifi = self.mounted_Realtek_wifi
-
+        ###
+        self.connected_devices = list()
+        global connected_devices
+        connected_devices = self.connected_devices
+        global exists
+        exists = False
+    
+    # Main
     def run(self):
         print "Starting Devhandler"
         print ""
+        # Continious port serch
         while True:
             time.sleep(1)
             print "threading"
             self.serach_ports()
-
+            print ""
+            print threading.enumerate()
 
     # List the connected devices
     def list_device_info(self):
@@ -90,25 +99,54 @@ class dev_handler(threading.Thread):
 
     # Serch for active ports and print info
     def serach_ports(self):
-        print "Seraching ports......"
+        print "Seraching ports..."
         print ""
         ports = list(serial.tools.list_ports.comports())
         counter = 0
+        # If no devices are connected purge mount list
+        if connected_devices != []:
+            if ports == []:
+                del connected_devices[:]
+                print connected_devices
+
+        # If you remove a device purge it from mount list        
+        if not ports == []:
+            for dev in connected_devices:
+                exists = False
+                for port in ports:
+                    if dev == port.serial_number:
+                        exists = True
+                        print exists
+                        print "exists"
+                print "status --->",exists
+                if exists == False:
+                    connected_devices.remove(dev)
+                    print "removed device"
+        #Reset             
+        exists = False
+        print connected_devices
+
         if ports == []:
-            print "No Active Ports 2"
-        if ports is None:
-            print "No Active Ports!"
+            print "No Active Ports..."
         else:
             for port in ports:
                 print ""
                 if port.pid == mounted_Arduino_Uno.idProduct:
-                    print "Is a sertified Arduino Uno - Starting configuration"
-                    conf_thread = configure_device(port.device)
-                    conf_thread.start()
+                    #print "Found!"
+                    if not connected_devices.__contains__(port.serial_number):
+                        #print "was not in list adding!"
+                        connected_devices.append(port.serial_number)
+                        #print connected_devices 
+                        #print "Is the device in the list?: ", connected_devices.__contains__(port.serial_number)
+                        print "Is a sertified Arduino Uno - Starting configuration"
+                        conf_thread = configure_device(port.device)
+                        conf_thread.start()
+                        conf_thread.setName("Arduino_Uno Configuration Thread")
                 elif port.pid == mounted_Arduino_Nano.idProduct:
                     print "Is a sertified Arduino Nano"
                     conf_thread = configure_device(port.device)
                     conf_thread.start()
+                    conf_thread.setName("Arduino_Nano Configuration Thread")
                 elif port.pid == mounted_Realtek_wifi.idProduct:
                     print "Is a sertified Realtek_802_11n"
                 else:
@@ -138,7 +176,6 @@ class configure_device (threading.Thread):
     def __init__(self, port):
         threading.Thread.__init__(self)
         self.port = port
-        
 
     def run(self):
         print "Starting the config thread"

@@ -16,6 +16,7 @@ print "------------------------------------------------------"
 
 #devHandler.list_device_info()
 devhandler.start()
+devhandler.setName("Device Handler Thread")
 print "bajsbajsbja"
 print "------------------------------------------------------"
 print "stuff"
@@ -23,3 +24,5 @@ print "stuff"
 print "stuuffff22"
 #print devHandler.mounted_Realtek_wifi.idProduct
 #print hex(devHandler.mounted_Arduino_Nano.idProduct)
+while True:
+    pass
