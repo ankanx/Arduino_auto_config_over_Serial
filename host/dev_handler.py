@@ -99,8 +99,8 @@ class dev_handler(threading.Thread):
 
     # Serch for active ports and print info
     def serach_ports(self):
-        print "Seraching ports..."
-        print ""
+        #print "Seraching ports..."
+        #print ""
         ports = list(serial.tools.list_ports.comports())
         counter = 0
         # If no devices are connected purge mount list
