@@ -54,7 +54,7 @@ class dev_handler(threading.Thread):
         # Continious port serch
         while True:
             time.sleep(1)
-            print "threading"
+            print threading.currentThread().getName(), "Heartbeat"
             self.serach_ports()
             print ""
             print threading.enumerate()
@@ -117,13 +117,14 @@ class dev_handler(threading.Thread):
                     if dev == port.serial_number:
                         exists = True
                         print exists
-                        print "exists"
+                        print "Device exists in both registries and wont be removed"
                 print "status --->",exists
                 if exists == False:
                     connected_devices.remove(dev)
-                    print "removed device"
+                    print "Removed device"
         #Reset             
         exists = False
+        print "Show connected_devices:"
         print connected_devices
 
         if ports == []:
@@ -191,10 +192,12 @@ class configure_device (threading.Thread):
         print "Connecting to " + port
         try:
             device.connect(port,baud)
+            #print "Sending ",repr(data)," to the device"
             device.send(data)
             print "Succeeded to configure device"           
         except:
             print "Error configuring Device"
+            raise
 
             
             # shows the (www.arduino.cc statement)

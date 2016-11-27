@@ -26,7 +26,7 @@ class USBclient():
         print data
 
     def send(self,data):
-        print 'Seding ', data, ' to host.'
+        print 'Sending ', repr(data), ' to device.'
         serialConn.write(data)
 
 

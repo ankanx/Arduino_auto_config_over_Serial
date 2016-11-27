@@ -1,5 +1,6 @@
 import dev_handler
-
+import time
+import threading
 #devHandler = dev_handler.dev_handler()
 
 #devHandler.list_active_ports()
@@ -25,4 +26,5 @@ print "stuuffff22"
 #print devHandler.mounted_Realtek_wifi.idProduct
 #print hex(devHandler.mounted_Arduino_Nano.idProduct)
 while True:
-    pass
+    time.sleep(1)
+    print threading.currentThread().getName(), "Heartbeat"
