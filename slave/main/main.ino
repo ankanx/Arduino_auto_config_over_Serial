@@ -1,41 +1,62 @@
 #include <EepromUtil.h>
 #include <EEPROM.h>
 
+// Serial event holding string
 String inputString = "";         // a string to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
-boolean written = false;
-const int BUFSIZE = 50;
-char buf[BUFSIZE];
+// Temp
+boolean finished_config = false;
+// Read Write buffer config
+const int buffer_size = 50;
+char buffer[buffer_size];
+// Check buffer
+const int check_size = 1;
+char check[check_size];
+// Reading init pos
+int start_pos = 1;
+
+// Setup 
 void setup() {
-  // initialize serial:
+  // initialize serial with 9600 baudrate:
   Serial.begin(9600);
   // reserve 200 bytes for the inputString:
   inputString.reserve(200);
+
+
 }
 
+// main
 void loop() {
-  // print the string when a newline arrives:
+  // Print the string when a newline arrives.
   if (stringComplete) {
+    if inputString{
+
     Serial.println(inputString); 
-    inputString.toCharArray(buf,BUFSIZE);
-    EepromUtil::eeprom_write_string(1,buf);
+    inputString.toCharArray(buffer,buffer_size);
+    EepromUtil::eeprom_write_string(start_pos,buffer);
+    
     //EepromUtil::eeprom_erase_all();
-    //EepromUtil::eeprom_write_int(8, 123);
+  
     // clear the string:
     inputString = "";
     stringComplete = false;
-    written = true;
+    finished_config = true;
+
+    }
+    
   }
   
-    // erase buffer
-  for (int i = 0; i < BUFSIZE; i++) {
-    buf[i] = 0;
+  // Erase buffer.
+  for (int i = 0; i < buffer_size; i++) {
+    buffer[i] = 0;
   }
   
-  if(written == true){
+  if(finished_config == true){
+    // To not flood the serial interface.
     delay(1000);
-    EepromUtil::eeprom_read_string(1,buf,BUFSIZE);
-    Serial.print(buf);
+    EepromUtil::eeprom_read_string(start_pos,buffer,buffer_size);
+    // Manditory to ensure whole buffer is printed.
+    Serial.print(buffer);
     Serial.println();
   }
   
