@@ -1,8 +1,11 @@
-
+#include <EepromUtil.h>
+#include <EEPROM.h>
 
 String inputString = "";         // a string to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
-
+boolean written = false;
+const int BUFSIZE = 50;
+char buf[BUFSIZE];
 void setup() {
   // initialize serial:
   Serial.begin(9600);
@@ -14,10 +17,28 @@ void loop() {
   // print the string when a newline arrives:
   if (stringComplete) {
     Serial.println(inputString); 
+    inputString.toCharArray(buf,BUFSIZE);
+    EepromUtil::eeprom_write_string(1,buf);
+    //EepromUtil::eeprom_erase_all();
+    //EepromUtil::eeprom_write_int(8, 123);
     // clear the string:
     inputString = "";
     stringComplete = false;
+    written = true;
   }
+  
+    // erase buffer
+  for (int i = 0; i < BUFSIZE; i++) {
+    buf[i] = 0;
+  }
+  
+  if(written == true){
+    delay(1000);
+    EepromUtil::eeprom_read_string(1,buf,BUFSIZE);
+    Serial.print(buf);
+    Serial.println();
+  }
+  
 }
 
 /*
