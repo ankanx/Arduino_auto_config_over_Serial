@@ -99,8 +99,8 @@ class dev_handler(threading.Thread):
 
     # Serch for active ports and print info
     def serach_ports(self):
-        print "Seraching ports..."
-        print ""
+        #print "Seraching ports..."
+        #print ""
         ports = list(serial.tools.list_ports.comports())
         counter = 0
         # If no devices are connected purge mount list
@@ -116,9 +116,9 @@ class dev_handler(threading.Thread):
                 for port in ports:
                     if dev == port.serial_number:
                         exists = True
-                        print exists
+                        #print exists
                         print "Device exists in both registries and wont be removed"
-                print "status --->",exists
+                #print "status --->",exists
                 if exists == False:
                     connected_devices.remove(dev)
                     print "Removed device"
@@ -152,24 +152,24 @@ class dev_handler(threading.Thread):
                     print "Is a sertified Realtek_802_11n"
                 else:
                     print "Device is not a sertified device"    
-                counter = counter +1
-                print "Active port nr: ", counter
-                print "_____________________________________________________________________"
-                print "Hardware ID: ", port.hwid
-                print "Device: ", port.device
-                print "Device path:", port.device_path
-                print "Interface: ", port.interface
-                print "Location: ", port.location
-                print "Manifacturer: ", port.manufacturer
-                print "Name: ", port.name
-                print "Product id: ", hex(port.pid)
-                print "Product: ", port.product
-                print "Serial_Number: ", port.serial_number
-                print "Subsystem: ", port.subsystem
-                print "Device path: ", port.usb_device_path
-                print "Vendor ID: " , hex(port.vid)
-                print "Description: ", port.description
-                print "_____________________________________________________________________"
+                    counter = counter +1
+                    print "Active port nr: ", counter
+                    print "_____________________________________________________________________"
+                    print "Hardware ID: ", port.hwid
+                    print "Device: ", port.device
+                    print "Device path:", port.device_path
+                    print "Interface: ", port.interface
+                    print "Location: ", port.location
+                    print "Manifacturer: ", port.manufacturer
+                    print "Name: ", port.name
+                    print "Product id: ", hex(port.pid)
+                    print "Product: ", port.product
+                    print "Serial_Number: ", port.serial_number
+                    print "Subsystem: ", port.subsystem
+                    print "Device path: ", port.usb_device_path
+                    print "Vendor ID: " , hex(port.vid)
+                    print "Description: ", port.description
+                    print "_____________________________________________________________________"
             
             
 # Threaded configuration            
@@ -180,7 +180,13 @@ class configure_device (threading.Thread):
 
     def run(self):
         print "Starting the config thread"
-        data = "stuff"
+        cmd = "This Command was sent by the Host service\n"
+        data = bytearray()
+        data.extend(cmd)
+        #for char in cmd:
+        #    data.append(hex(ord(char)))
+       
+        
         self.configure(self.port,data)
         print "Configuration Thread Exiting"
 
