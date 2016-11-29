@@ -35,10 +35,16 @@ void loop() {
     if (inputString.charAt(0) == 'C'){
       Serial.print("Got: ");
       Serial.println(inputString);
+
+      inputString.remove(0, 1);
       inputString.toCharArray(buffer,buffer_size);
+      Serial.println(buffer);
       Serial.println("Writing to EEPROM!");
       EepromUtil::eeprom_write_string(start_pos,buffer);
+      Serial.println(buffer);
 
+      //buffer[4] = 'T';
+      EepromUtil::eeprom_write_string(start_pos+50,buffer);
       //EepromUtil::eeprom_erase_all();
 
       // clear the string:
@@ -66,8 +72,59 @@ void loop() {
   if(finished_config == true){
     // To not flood the serial interface.
     delay(1000);
+    // UUID
     EepromUtil::eeprom_read_string(start_pos,buffer,buffer_size);
     // Manditory to ensure whole buffer is printed.
+    Serial.print("first store:");
+    Serial.print(buffer);
+    Serial.println();
+    // Erase buffer.
+    for (int i = 0; i < buffer_size; i++) {
+      buffer[i] = 0;
+    }
+
+    // Name
+    EepromUtil::eeprom_read_string(start_pos+50,buffer,buffer_size);
+    Serial.print("Third store:");
+    Serial.print(buffer);
+    Serial.println();
+    for (int i = 0; i < buffer_size; i++) {
+      buffer[i] = 0;
+    }
+
+    // Type
+    EepromUtil::eeprom_read_string(start_pos+100,buffer,buffer_size);
+    Serial.print("Second store:");
+    Serial.print(buffer);
+    Serial.println();
+
+    for (int i = 0; i < buffer_size; i++) {
+      buffer[i] = 0;
+    }
+
+    // Location
+    EepromUtil::eeprom_read_string(start_pos+150,buffer,buffer_size);
+    Serial.print("Second store:");
+    Serial.print(buffer);
+    Serial.println();
+
+    for (int i = 0; i < buffer_size; i++) {
+      buffer[i] = 0;
+    }
+
+    // SSID
+    EepromUtil::eeprom_read_string(start_pos+200,buffer,buffer_size);
+    Serial.print("Second store:");
+    Serial.print(buffer);
+    Serial.println();
+
+    for (int i = 0; i < buffer_size; i++) {
+      buffer[i] = 0;
+    }
+
+    // PASSWORD
+    EepromUtil::eeprom_read_string(start_pos+250,buffer,buffer_size);
+    Serial.print("Second store:");
     Serial.print(buffer);
     Serial.println();
   }
