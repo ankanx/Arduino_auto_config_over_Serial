@@ -20,9 +20,9 @@ int start_pos = 1;
 void setup() {
   // initialize serial with 9600 baudrate:
   Serial.begin(9600);
+
   // reserve 200 bytes for the inputString:
   inputString.reserve(200);
-
 
 }
 
@@ -30,10 +30,13 @@ void setup() {
 void loop() {
   // Print the string when a newline arrives.
   if (stringComplete) {
-    if (inputString.charAt(1) == 'C'){
-
+    // If we recive the 'C' (config) char at start
+    // Save the rest of the message in EEPROM
+    if (inputString.charAt(0) == 'C'){
+      Serial.print("Got: ");
       Serial.println(inputString);
       inputString.toCharArray(buffer,buffer_size);
+      Serial.println("Writing to EEPROM!");
       EepromUtil::eeprom_write_string(start_pos,buffer);
 
       //EepromUtil::eeprom_erase_all();
@@ -42,9 +45,17 @@ void loop() {
       inputString = "";
       stringComplete = false;
       finished_config = true;
-
     }
 
+    if (inputString.charAt(0) == 'D'){
+      Serial.println("Erasing Config!");
+      EepromUtil::eeprom_erase_all();
+      Serial.println("Erased Config!");
+      // clear the string:
+      inputString = "";
+      stringComplete = false;
+      finished_config = false;
+    }
   }
 
   // Erase buffer.
