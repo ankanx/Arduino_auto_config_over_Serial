@@ -10,12 +10,22 @@ boolean finished_config = false;
 // Read Write buffer config
 const int buffer_size = 50;
 char buffer[buffer_size];
+char temp_buffer[buffer_size];
 // Check buffer
 const int check_size = 1;
 char check[check_size];
 // Reading init pos
 int start_pos = 1;
 
+boolean readValue =false;
+
+String sparc_name = "";
+String sparc_type = "";
+String sparc_uuid = "";
+String sparc_ssid = "";
+String sparc_password = "";
+
+int value = 0;
 // Setup
 void setup() {
   // initialize serial with 9600 baudrate:
@@ -40,19 +50,48 @@ void loop() {
       inputString.toCharArray(buffer,buffer_size);
       Serial.println(buffer);
       Serial.println("Writing to EEPROM!");
-      EepromUtil::eeprom_write_string(start_pos,buffer);
-      Serial.println(buffer);
 
-      //buffer[4] = 'T';
-      EepromUtil::eeprom_write_string(start_pos+50,buffer);
-      //EepromUtil::eeprom_erase_all();
+      // Read and write values seperated by ':'
+      // Each value gets 50 bytes
+      for (int i = 0; i < buffer_size;i++){
+        // Advance 50 bytes
+        value = value + 50;
+        // If new value
+        if(buffer[i] == ':'){
+
+          int z = 0;
+          readValue = false;
+
+          // Erase buffer.
+          for (int x = 0; x < buffer_size; x++) {
+            temp_buffer[x] = 0;
+          }
+          // Read and store a value
+          while (!readValue){
+            if (buffer[i] == ':'){
+              readValue = true;
+              i = i-1;
+            }else{
+            temp_buffer[z] = buffer[i];
+            EepromUtil::eeprom_write_string(start_pos + value,temp_buffer);
+            Serial.println(temp_buffer);
+            i++;
+            z++;
+
+            }
+          }
+        }
+      }
+
 
       // clear the string:
       inputString = "";
+      readValue = false;
+      value = 0;
       stringComplete = false;
       finished_config = true;
     }
-
+    // Erase command!
     if (inputString.charAt(0) == 'D'){
       Serial.println("Erasing Config!");
       EepromUtil::eeprom_erase_all();
