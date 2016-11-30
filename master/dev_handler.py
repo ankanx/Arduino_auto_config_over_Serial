@@ -199,12 +199,14 @@ class configure_device (threading.Thread):
         baud = 9600
         device = lib.UsbSerial.USBclient()
         print "Connecting to " + port
+        time.sleep(2)
         try:
             device.connect(port,baud)
+            time.sleep(1)
             device.connectionMade()
             print "Sending ",repr(data)," to the device"
             device.send(data)
-            time.sleep(1)
+            time.sleep(6)
             print "Succeeded to configure device"
             device.disconnect()           
         except:
