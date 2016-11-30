@@ -8,8 +8,7 @@ import threading
 devhandler = dev_handler.dev_handler()
 
 #devhandler.find_port(devhandler.mounted_Arduino_Uno.idVendor)
-devhandler.list_active_ports()
-devhandler.serach_ports()
+
 
 
 
@@ -18,11 +17,11 @@ print "------------------------------------------------------"
 #devHandler.list_device_info()
 devhandler.start()
 devhandler.setName("Device Handler Thread")
-print "bajsbajsbja"
+#print "bajsbajsbja"
 print "------------------------------------------------------"
-print "stuff"
+#print "stuff"
 #devhandler.list_device_info()
-print "stuuffff22"
+#print "stuuffff22"
 #print devHandler.mounted_Realtek_wifi.idProduct
 #print hex(devHandler.mounted_Arduino_Nano.idProduct)
 while True:

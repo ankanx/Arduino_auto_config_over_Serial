@@ -121,6 +121,7 @@ class dev_handler(threading.Thread):
                 #print "status --->",exists
                 if exists == False:
                     connected_devices.remove(dev)
+                    
                     print "Removed device"
         #Reset             
         exists = False
@@ -198,12 +199,15 @@ class configure_device (threading.Thread):
         print "Connecting to " + port
         try:
             device.connect(port,baud)
+            device.connectionMade()
             #print "Sending ",repr(data)," to the device"
             device.send(data)
-            print "Succeeded to configure device"           
+            print "Succeeded to configure device"
+            device.disconnect()           
         except:
             print "Error configuring Device"
             raise
+    
 
             
             # shows the (www.arduino.cc statement)
