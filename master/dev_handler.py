@@ -180,7 +180,7 @@ class configure_device (threading.Thread):
 
     def run(self):
         print "Starting the config thread"
-        cmd = "This Command was sent by the Host service\n"
+        cmd = "CThis Command was sent by the Host service\n"
         data = bytearray()
         data.extend(cmd)
         #for char in cmd:

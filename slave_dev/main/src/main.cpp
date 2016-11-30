@@ -75,6 +75,7 @@ void loop() {
             temp_buffer[z] = buffer[i];
             EepromUtil::eeprom_write_string(start_pos + value,temp_buffer);
             Serial.println(temp_buffer);
+            Serial.flush();
             i++;
             z++;
 
@@ -117,6 +118,7 @@ void loop() {
     Serial.print("first store:");
     Serial.print(buffer);
     Serial.println();
+    Serial.flush();
     // Erase buffer.
     for (int i = 0; i < buffer_size; i++) {
       buffer[i] = 0;
