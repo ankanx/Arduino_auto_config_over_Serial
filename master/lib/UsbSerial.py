@@ -36,9 +36,12 @@ class USBclient():
 
     def disconnect(self):
         print "disconnected"
+        print "check if open", serialConn.isOpen()
         reading_service.disconnected()
+        serialConn.flush()
         serialConn.close()
-        print serialConn._checkClosed()
+        serialConn.is_open
+        print "Is serial open",serialConn.isOpen()
 
 
 class reader(threading.Thread):
@@ -54,11 +57,14 @@ class reader(threading.Thread):
             while self.connected:
                 time.sleep(1)
                 print threading.currentThread().getName(), "Heartbeat"
-                if serialConn.in_waiting > 0:
-                    print "Serial responce: " ,serialConn.read_all()
-                else:
-                    print "No data in serial buffer"
-
+                try:
+                    if serialConn.in_waiting > 0:
+                        print "Serial responce: " ,serialConn.read_all()
+                    else:
+                        print "No data in serial buffer"
+                except:
+                    print "Serial Read failed! probably becouse of dismounting"
+        
         def disconnected(self):
             time.sleep(0.5)
             self.connected = False

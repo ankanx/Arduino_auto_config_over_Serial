@@ -152,26 +152,28 @@ class dev_handler(threading.Thread):
                 elif port.pid == mounted_Realtek_wifi.idProduct:
                     print "Is a sertified Realtek_802_11n"
                 else:
-                    print "Device is not a sertified device"    
-                    counter = counter +1
-                    print "Active port nr: ", counter
-                    print "_____________________________________________________________________"
-                    print "Hardware ID: ", port.hwid
-                    print "Device: ", port.device
-                    print "Device path:", port.device_path
-                    print "Interface: ", port.interface
-                    print "Location: ", port.location
-                    print "Manifacturer: ", port.manufacturer
-                    print "Name: ", port.name
-                    print "Product id: ", hex(port.pid)
-                    print "Product: ", port.product
-                    print "Serial_Number: ", port.serial_number
-                    print "Subsystem: ", port.subsystem
-                    print "Device path: ", port.usb_device_path
-                    print "Vendor ID: " , hex(port.vid)
-                    print "Description: ", port.description
-                    print "_____________________________________________________________________"
-            
+                    try:
+                        print "Device is not a sertified device"    
+                        counter = counter +1
+                        print "Active port nr: ", counter
+                        print "_____________________________________________________________________"
+                        print "Hardware ID: ", port.hwid
+                        print "Device: ", port.device
+                        print "Device path:", port.device_path
+                        print "Interface: ", port.interface
+                        print "Location: ", port.location
+                        print "Manifacturer: ", port.manufacturer
+                        print "Name: ", port.name
+                        print "Product id: ", hex(port.pid)
+                        print "Product: ", port.product
+                        print "Serial_Number: ", port.serial_number
+                        print "Subsystem: ", port.subsystem
+                        print "Device path: ", port.usb_device_path
+                        print "Vendor ID: " , hex(port.vid)
+                        print "Description: ", port.description
+                        print "_____________________________________________________________________"
+                    except:
+                        print "Error reading from device!"
             
 # Threaded configuration            
 class configure_device (threading.Thread):
@@ -200,8 +202,9 @@ class configure_device (threading.Thread):
         try:
             device.connect(port,baud)
             device.connectionMade()
-            #print "Sending ",repr(data)," to the device"
+            print "Sending ",repr(data)," to the device"
             device.send(data)
+            time.sleep(1)
             print "Succeeded to configure device"
             device.disconnect()           
         except:
